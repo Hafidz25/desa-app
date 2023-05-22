@@ -1,17 +1,15 @@
 import React, { Component } from "react";
-import {
-  View, StyleSheet, StatusBar, SafeAreaView,
-} from "react-native";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { View, StyleSheet, StatusBar, SafeAreaView } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import * as RootNavigation from './RootNavigation';
+import * as RootNavigation from "./RootNavigation";
 import { MainStackNavigator } from "./navigation/StackNavigator";
 
-import Welcome from './pages/Welcome';
-import Login from './pages/Login';
-import LupaPassword from './pages/LupaPassword';
-import Verifikasi from './pages/Verifikasi';
+import Welcome from "./pages/Welcome";
+import Login from "./pages/Login";
+import LupaPassword from "./pages/LupaPassword";
+import Verifikasi from "./pages/Verifikasi";
 
 const Stack = createStackNavigator();
 
@@ -33,14 +31,14 @@ const Auth = () => {
         component={LupaPassword}
         options={({ navigation }) => ({
           headerBackTitleVisible: false,
-          headerTitle: '',
+          headerTitle: "",
           headerStyle: {
-            backgroundColor: '#FFF',
+            backgroundColor: "#FFF",
           },
-          headerTintColor: '#000',
+          headerTintColor: "#000",
           headerTitleStyle: {
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
+            fontWeight: "bold",
+            textTransform: "uppercase",
           },
         })}
       />
@@ -49,20 +47,20 @@ const Auth = () => {
         component={Verifikasi}
         options={({ navigation }) => ({
           headerBackTitleVisible: false,
-          headerTitle: '',
+          headerTitle: "",
           headerStyle: {
-            backgroundColor: '#FFF',
+            backgroundColor: "#FFF",
           },
-          headerTintColor: '#000',
+          headerTintColor: "#000",
           headerTitleStyle: {
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
+            fontWeight: "bold",
+            textTransform: "uppercase",
           },
         })}
       />
     </Stack.Navigator>
   );
-}
+};
 
 const MyStatusBar = ({ backgroundColor, ...props }) => (
   <View style={[styles.statusBar, { backgroundColor }]}>
@@ -90,9 +88,9 @@ export default class App extends Component {
           />
         </Stack.Navigator>
       </NavigationContainer>
-    )
+    );
   }
-};
+}
 
 const STATUSBAR_HEIGHT = StatusBar.currentHeight;
 const styles = StyleSheet.create({
