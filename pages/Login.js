@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "../lib/axios";
 
 export default class Login extends Component {
   constructor(props) {
@@ -33,52 +34,31 @@ export default class Login extends Component {
   _Login = async () => {
     let username = this.state.userEmail;
     let password = this.state.userPassword;
+
     if (!username && !password) {
-      alert("Silahkan Masukkan Username dan Password Anda");
-      return;
+      return alert("Silahkan Masukkan Username dan Password Anda");
     }
+
     if (!username) {
-      alert("Silahkan Masukkan Username Anda");
-      return;
+      return alert("Silahkan Masukkan Username Anda");
     }
+
     if (!password) {
-      alert("Silahkan Masukkan Password Anda");
-      return;
+      return alert("Silahkan Masukkan Password Anda");
     }
 
-    let headers = {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
+    const response = await axios
+      .post("auth/login", { username, password })
+      .catch((err) => alert(err.response.data.message));
 
-    let body = {
-      username: username,
-      password: password,
-    };
+    if (response.status !== 200) {
+      return alert(response.data.message);
+    }
 
-    // let url = "http://10.0.0.151:8000/api/auth/login";
-    let url = "https://host02.birosolusi.com/edesa/public/api/auth/login";
-
-    fetch(url, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(body),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson.message);
-        if (responseJson.message == "login success") {
-          this.storeToken(JSON.stringify(responseJson.access_token));
-          this.saveItem("access_token", responseJson.access_token);
-          this.saveItem("refresh_token", responseJson.refresh_token);
-          this.props.navigation.navigate("Utama");
-        } else {
-          alert(responseJson.message);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    this.storeToken(JSON.stringify(response.data.access_token));
+    this.saveItem("access_token", response.data.access_token);
+    this.saveItem("refresh_token", response.data.refresh_token);
+    this.props.navigation.navigate("Utama");
   };
 
   async storeToken(user) {
