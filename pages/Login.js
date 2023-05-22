@@ -47,17 +47,17 @@ export default class Login extends Component {
       return alert("Silahkan Masukkan Password Anda");
     }
 
-    const response = await axios
+    const res = await axios
       .post("auth/login", { username, password })
-      .catch((err) => alert(err.response.data.message));
+      .catch((err) => err);
 
-    if (response.status !== 200) {
-      return alert(response.data.message);
+    if (res.status !== 200) {
+      return alert(res.response.data.message);
     }
 
-    this.storeToken(JSON.stringify(response.data.access_token));
-    this.saveItem("access_token", response.data.access_token);
-    this.saveItem("refresh_token", response.data.refresh_token);
+    this.storeToken(JSON.stringify(res.data.access_token));
+    this.saveItem("access_token", res.data.access_token);
+    this.saveItem("refresh_token", res.data.refresh_token);
     this.props.navigation.navigate("Utama");
   };
 
@@ -69,13 +69,13 @@ export default class Login extends Component {
     }
   }
 
-  saveItem = async (item, selectedValue) => {
+  async saveItem(item, selectedValue) {
     try {
       await AsyncStorage.setItem(item, JSON.stringify(selectedValue));
     } catch (error) {
       console.error("AsyncStorage error: " + error.message);
     }
-  };
+  }
 
   render() {
     return (
