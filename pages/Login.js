@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "../lib/axios";
@@ -36,15 +37,18 @@ export default class Login extends Component {
     let password = this.state.userPassword;
 
     if (!username && !password) {
-      return alert("Silahkan Masukkan Username dan Password Anda");
+      return Alert.alert(
+        "Form kosong!",
+        "Mohon masukkan username dan password Anda",
+      );
     }
 
     if (!username) {
-      return alert("Silahkan Masukkan Username Anda");
+      return Alert.alert("Username kosong!", "Mohon Masukkan username Anda");
     }
 
     if (!password) {
-      return alert("Silahkan Masukkan Password Anda");
+      return Alert.alert("Password kosong!", "Mohon masukkan password Anda");
     }
 
     const res = await axios
