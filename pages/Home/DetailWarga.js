@@ -10,6 +10,7 @@ import {
 import Modal from "react-native-modal";
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "../../lib/axios";
 
 import Logo from "../../assets/images.png";
 
@@ -52,38 +53,30 @@ export default class DetailWarga extends Component {
   }
 
   _GetDataWarga = async () => {
-    let token = this.state.access_token;
-    let id = this.state.id;
-    let headers = {
-      "x-access-token": token,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    };
+    const res = await axios
+      .get(`/v1/penduduks/${this.state.id}`, {
+        headers: {
+          "x-access-token": this.state.access_token,
+        },
+      })
+      .catch((err) => err);
 
-    // let url = "http://10.0.0.151:8000/api/v1/penduduks/"+id;
-    let url =
-      "https://host02.birosolusi.com/edesa/public/api/v1/penduduks/" + id;
+    if (res.status !== 200) {
+      return alert(res.response.data.message);
+    }
 
-    fetch(url, {
-      method: "GET",
-      headers,
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          data: responseJson,
-          dataCareer: responseJson.data.career,
-          dataName: responseJson.data.legal_name,
-          dataName2: responseJson.data.alias_name,
-          dataNation: responseJson.data.nationality.value,
-          dataReligion: responseJson.data.religion.value,
-          religionFile: responseJson.data.religion.document,
-          dataLife: responseJson.life_period.birth,
-          dataKotaLahir: responseJson.life_period.birth.region,
-          dataFile: responseJson.data.file,
-        });
-        console.log(responseJson.data.religion);
-      });
+    this.setState({
+      data: res.data,
+      dataCareer: res.data.data.career,
+      dataName: res.data.data.legal_name,
+      dataName2: res.data.data.alias_name,
+      dataNation: res.data.data.nationality.value,
+      dataReligion: res.data.data.religion.value,
+      religionFile: res.data.data.religion.document,
+      dataLife: res.data.life_period.birth,
+      dataKotaLahir: res.data.life_period.birth.region,
+      dataFile: res.data.data.file,
+    });
   };
 
   showAliasName = () => {
@@ -319,7 +312,7 @@ export default class DetailWarga extends Component {
                       this.setState({ fileKtp: true });
                     }}
                   >
-                    <Text style={styles.fileText}>Show File</Text>
+                    <Text style={styles.fileText}>Tampilkan File</Text>
                   </TouchableOpacity>
                   <Modal
                     backdropOpacity={0.5}
@@ -383,7 +376,7 @@ export default class DetailWarga extends Component {
                       this.setState({ fileTtd: true });
                     }}
                   >
-                    <Text style={styles.fileText}>Show File</Text>
+                    <Text style={styles.fileText}>Tampilkan File</Text>
                   </TouchableOpacity>
                   <Modal
                     backdropOpacity={0.5}
@@ -448,7 +441,7 @@ export default class DetailWarga extends Component {
                       this.setState({ fileAgama: true });
                     }}
                   >
-                    <Text style={styles.fileText}>Show File</Text>
+                    <Text style={styles.fileText}>Tampilkan File</Text>
                   </TouchableOpacity>
                   <Modal
                     backdropOpacity={0.5}
